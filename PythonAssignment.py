@@ -86,9 +86,8 @@ def GetContracts():
     
     return result
 
-# Takes:
-#  * applications _> All the applications we want to process
-#  * fileName _> File we want to Create and write or append to 
+# Takes * applications _> All the applications we want to process
+#  * fileName _> File we want to create or append to 
 #  * days _> Period, for which to count claims. since there were no claims in the last 180 days, 
 #                       we can specify larger period of time so that we can get different results 
 def WriteTotalClaims(applications,fileName,days):
@@ -103,7 +102,9 @@ def WriteTotalClaims(applications,fileName,days):
                 claim_quantity = -3
             writer.writerow([record.id,record.date,claim_quantity])
 
-
+# Takes:
+#  * fileName _> File we want to create or append to 
+#  * exclude_from_list _> List of items to be excluded from banks  
 def Write_disbursed_loans(fileName,exclude_from_list):
     with open(fileName, mode='a',newline='') as file:
         writer = csv.writer(file) 
@@ -119,7 +120,7 @@ def Write_disbursed_loans(fileName,exclude_from_list):
                     continue
                 writer.writerow([record.id,record.date,r['bank'],r['loan_summa'],r['contract_date']])
 
-
+#Takes filename
 def WriteDaysSinceLastLoan(fileName):
     with open(fileName, mode='a',newline='') as file:
         writer = csv.writer(file) 
@@ -136,11 +137,11 @@ def WriteDaysSinceLastLoan(fileName):
 
 # #
 # # Calculate claims for last 180 and 500 days ( Task 1 )
-# WriteTotalClaims(GetContracts(),'180_days_data.csv',180) # Calculate for 180 days
-# WriteTotalClaims(GetContracts(),'500_days_data.csv',500) # Calculate for 500 days
+WriteTotalClaims(GetContracts(),'180_days_data.csv',180) # Calculate for 180 days
+WriteTotalClaims(GetContracts(),'500_days_data.csv',500) # Calculate for 500 days
 
 # # Get records of disposed loans ( Task 2 )
-# Write_disbursed_loans('loans_test.csv',['LIZ','LOM','MKO','SUG']) # Exclude these banks ['LIZ','LOM','MKO','SUG'] 
-# Write_disbursed_loans('loans_test3.csv',['63']) # Exclude these banks ['63'] 
+Write_disbursed_loans('loans_test.csv',['LIZ','LOM','MKO','SUG']) # Exclude these banks ['LIZ','LOM','MKO','SUG'] 
+Write_disbursed_loans('loans_test3.csv',['63']) # Exclude these banks ['63'] 
 
 WriteDaysSinceLastLoan('TestDaysScince.csv')
